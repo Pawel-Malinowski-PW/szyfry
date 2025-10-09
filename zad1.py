@@ -10,8 +10,6 @@ def caesar_encrypt(text, shift, alphabet):
             result += char
     return result
 
-def caesar_decrypt(text, shift, alphabet):
-    return caesar_encrypt(text, -shift, alphabet)
 
 def letter_freq(text, alphabet):
     counter = collections.Counter([c for c in text if c in alphabet])
@@ -34,7 +32,7 @@ def break_caesar_chi2(ciphertext, alphabet, exp_freq):
     min_chi2 = float('inf')
     likely_shift = 0
     for shift in range(len(alphabet)):
-        decrypted = caesar_decrypt(ciphertext, shift, alphabet)
+        decrypted = caesar_encrypt(ciphertext, -shift, alphabet)
         obs_freq = letter_freq(decrypted, alphabet)
         chi2 = chi_squared_stat(obs_freq, exp_freq, alphabet)
         if chi2 < min_chi2:
@@ -75,17 +73,12 @@ freq_table_it = {
 def read_file(filename):
     with open(filename, encoding="utf-8") as f:
         return f.read().strip()
-
-def write_file(filename, text):
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(text)
-
 # Wczytaj teksty z plików
 plain_pl = read_file("polski.txt")
 plain_en = read_file("ang.txt")
 plain_it = read_file("wloski.txt")
 
-# Szyfruj teksty (dowolne przesunięcia, np. 7, 3, 10)
+# Przesunięcia
 shift_pl = 7
 shift_en = 3
 shift_it = 10
@@ -94,32 +87,20 @@ cipher_pl = caesar_encrypt(plain_pl, shift_pl, alphabet_pl)
 cipher_en = caesar_encrypt(plain_en, shift_en, alphabet_en)
 cipher_it = caesar_encrypt(plain_it, shift_it, alphabet_it)
 
-# Zapisz zaszyfrowane teksty do plików
-write_file("zaszyfrowany_pl.txt", cipher_pl)
-write_file("zaszyfrowany_en.txt", cipher_en)
-write_file("zaszyfrowany_it.txt", cipher_it)
-
-print("Zaszyfrowane teksty zapisane do plików.")
-
-# Wczytaj zaszyfrowane teksty z plików
-cipher_pl = read_file("zaszyfrowany_pl.txt")
-cipher_en = read_file("zaszyfrowany_en.txt")
-cipher_it = read_file("zaszyfrowany_it.txt")
 
 print("\nZaszyfrowane:")
 print("PL:", cipher_pl)
 print("EN:", cipher_en)
 print("IT:", cipher_it)
 
-# Łamanie szyfru (analiza chi-kwadrat)
 found_shift_pl = break_caesar_chi2(cipher_pl, alphabet_pl, freq_table_pl)
 found_shift_en = break_caesar_chi2(cipher_en, alphabet_en, freq_table_en)
 found_shift_it = break_caesar_chi2(cipher_it, alphabet_it, freq_table_it)
 
-print("\nOdszyfrowane (złamane klucze):")
-print("PL:", caesar_decrypt(cipher_pl, found_shift_pl, alphabet_pl))
-print("EN:", caesar_decrypt(cipher_en, found_shift_en, alphabet_en))
-print("IT:", caesar_decrypt(cipher_it, found_shift_it, alphabet_it))
+print("\nOdszyfrowane:")
+print("PL:", caesar_encrypt(cipher_pl, -found_shift_pl, alphabet_pl))
+print("EN:", caesar_encrypt(cipher_en, -found_shift_en, alphabet_en))
+print("IT:", caesar_encrypt(cipher_it, -found_shift_it, alphabet_it))
 
 print("\nOdgadnięte przesunięcia:")
 print("PL:", found_shift_pl)
