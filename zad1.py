@@ -16,7 +16,7 @@ def letter_freq(text, alphabet):
     total = sum(counter.values())
     freq = {}
     for letter in alphabet:
-        freq[letter] = (counter[letter] / total * 100) if total > 0 else 0
+        freq[letter] = (counter[letter] / total) if total > 0 else 0
     return freq
 
 def chi_squared_stat(obs_freq, exp_freq, alphabet):
@@ -25,7 +25,7 @@ def chi_squared_stat(obs_freq, exp_freq, alphabet):
         expected = exp_freq.get(letter, 0)
         observed = obs_freq.get(letter, 0)
         if expected > 0:
-            chi2 += ((observed - expected) ** 2) / expected
+            chi2 += ((observed - expected)) / expected
     return chi2
 
 def break_caesar_chi2(ciphertext, alphabet, exp_freq):
@@ -40,12 +40,10 @@ def break_caesar_chi2(ciphertext, alphabet, exp_freq):
             likely_shift = shift
     return likely_shift
 
-# Alfabet dla każdego języka
 alphabet_pl = "aąbcćdeęfghijklłmnńoópqrsśtuvwxyzźż"
 alphabet_en = "abcdefghijklmnopqrstuvwxyz"
 alphabet_it = "abcdefghijklmnopqrstuvwxyz"
 
-# POLSKI (wg NKJP 2012)
 freq_table_pl = {
     'a': 8.965, 'ą': 1.021, 'b': 1.482, 'c': 3.988, 'ć': 0.448, 'd': 3.293, 'e': 7.921,
     'ę': 1.131, 'f': 0.312, 'g': 1.377, 'h': 1.072, 'i': 8.286, 'j': 2.343, 'k': 3.411,
@@ -54,7 +52,6 @@ freq_table_pl = {
     'v': 0.034, 'w': 4.549, 'x': 0.019, 'y': 3.857, 'z': 5.620, 'ź': 0.061, 'ż': 0.885
 }
 
-# ANGIELSKI (wg Wikipedia)
 freq_table_en = {
     'a': 8.167, 'b': 1.492, 'c': 2.782, 'd': 4.253, 'e': 12.702, 'f': 2.228, 'g': 2.015,
     'h': 6.094, 'i': 6.966, 'j': 0.153, 'k': 0.772, 'l': 4.025, 'm': 2.406, 'n': 6.749,
@@ -62,7 +59,7 @@ freq_table_en = {
     'v': 0.978, 'w': 2.360, 'x': 0.150, 'y': 1.974, 'z': 0.074
 }
 
-# WŁOSKI (wg Wikipedia)
+
 freq_table_it = {
     'a': 11.745, 'b': 0.927, 'c': 4.501, 'd': 3.736, 'e': 11.792, 'f': 1.153, 'g': 1.644,
     'h': 0.636, 'i': 10.143, 'j': 0.011, 'k': 0.009, 'l': 6.510, 'm': 2.512, 'n': 6.883,
@@ -73,12 +70,11 @@ freq_table_it = {
 def read_file(filename):
     with open(filename, encoding="utf-8") as f:
         return f.read().strip()
-# Wczytaj teksty z plików
+
 plain_pl = read_file("polski.txt")
 plain_en = read_file("ang.txt")
 plain_it = read_file("wloski.txt")
 
-# Przesunięcia
 shift_pl = 7
 shift_en = 3
 shift_it = 10
@@ -88,7 +84,7 @@ cipher_en = caesar_encrypt(plain_en, shift_en, alphabet_en)
 cipher_it = caesar_encrypt(plain_it, shift_it, alphabet_it)
 
 
-print("\nZaszyfrowane:")
+print("Zaszyfrowane:")
 print("PL:", cipher_pl)
 print("EN:", cipher_en)
 print("IT:", cipher_it)
@@ -97,12 +93,12 @@ found_shift_pl = break_caesar_chi2(cipher_pl, alphabet_pl, freq_table_pl)
 found_shift_en = break_caesar_chi2(cipher_en, alphabet_en, freq_table_en)
 found_shift_it = break_caesar_chi2(cipher_it, alphabet_it, freq_table_it)
 
-print("\nOdszyfrowane:")
+print("Odszyfrowane:")
 print("PL:", caesar_encrypt(cipher_pl, -found_shift_pl, alphabet_pl))
 print("EN:", caesar_encrypt(cipher_en, -found_shift_en, alphabet_en))
 print("IT:", caesar_encrypt(cipher_it, -found_shift_it, alphabet_it))
 
-print("\nOdgadnięte przesunięcia:")
+print("Odgadnięte przesunięcia:")
 print("PL:", found_shift_pl)
 print("EN:", found_shift_en)
 print("IT:", found_shift_it)
