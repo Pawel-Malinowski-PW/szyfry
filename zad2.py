@@ -33,24 +33,18 @@ def entropy(data):
 def brute_force_rc4(filename):
     with open(filename, "rb") as f:
         ciphertext = f.read()
-    min_entropy = float('inf')
-    likely_key = None
-    likely_plain = None
+    min_entropy = 6
     for idx, key_tuple in enumerate(itertools.product(range(ord('a'), ord('z')+1), repeat=3)):
         if idx % 1000 == 0:
             print(f"Przetworzono {idx} kluczy...")
         key = bytes(key_tuple)
         plain = rc4(key, ciphertext)
         ent = entropy(plain)
-        # Entropia tekstu jawnego (język naturalny) powinna być niższa niż losowego ciągu bajtów
         if ent < min_entropy:
-            min_entropy = ent
-            likely_key = key
-            likely_plain = plain
-    print(f"Najbardziej prawdopodobny klucz dla {filename}: {likely_key.decode('ascii')}")
-    print(f"Entropia: {min_entropy:.3f}")
-    print("Fragment odszyfrowanego tekstu:", likely_plain[:200])
+            break;
+    print(f"Najbardziej prawdopodobny klucz dla {filename}: {key.decode('ascii')}")
+    print(f"Entropia: {ent:.3f}")
+    print("Odszyfrowany tekst:", plain)
 
-# Atak na oba pliki
 brute_force_rc4("crypto.rc4")
 brute_force_rc4("crypto2.rc4")
