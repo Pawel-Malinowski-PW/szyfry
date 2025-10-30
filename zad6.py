@@ -21,7 +21,7 @@ def crack_md5_crypt(hash_value, passwords):
         if i % 100 == 0:
             print(f"MD5-Crypt: sprawdzono {i}/{len(passwords)} haseł", end='\r')
         if md5_crypt.hash(pwd, salt=salt) == hash_value:
-            print(f"\nZnaleziono po {i+1} próbach!")
+            print(f"\nZnaleziono po {i+1} próbach")
             return pwd
     print(f"\nMD5-Crypt: sprawdzono wszystkie {len(passwords)} haseł")
     return None
@@ -53,7 +53,7 @@ def crack_argon2id(hash_value, passwords):
     salt_bytes = safe_b64decode(salt_b64)
     
     for i, pwd in enumerate(passwords):
-        if i % 50 == 0:  # Rzadziej dla Argon2 (wolniejszy)
+        if i % 50 == 0:
             print(f"Argon2id: sprawdzono {i}/{len(passwords)} haseł", end='\r')
         h = argon2.using(type='id', memory_cost=memory, time_cost=time_cost, 
                         parallelism=parallelism, salt=salt_bytes).hash(pwd)
@@ -87,5 +87,5 @@ def safe_b64decode(s):
 
 print("Hash 1 (MD5-Crypt):", crack_md5_crypt(hashes[0], passwords))
 print("Hash 2 (SHA256-Crypt):", crack_sha256_crypt(hashes[1], passwords))
-print("Hash 3 (Argon2id):", crack_argon2id(hashes[2], passwords))
 print("Hash 4 (MD5-Crypt + pepper):", crack_md5_crypt_pepper(hashes[3], passwords))
+print("Hash 3 (Argon2id):", crack_argon2id(hashes[2], passwords))

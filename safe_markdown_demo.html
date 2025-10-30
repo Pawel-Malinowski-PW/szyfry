@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bezpieczny Markdown</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        code { background: #f4f4f4; padding: 2px 4px; }
+        pre { background: #f4f4f4; padding: 10px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        blockquote { border-left: 4px solid #ccc; margin: 0; padding-left: 16px; }
+    </style>
+</head>
+<body>
+    <h1>Demo bezpiecznego renderowania Markdown</h1>
+    <h1>Nagłówek 1</h1>
+<h2>Nagłówek 2</h2>
+<p><strong>Pogrubiony tekst</strong> i <em>kursywa</em></p>
+<h3>Lista:</h3>
+<ul>
+<li>Element 1</li>
+<li>Element 2</li>
+<li>Element 3</li>
+</ul>
+<h3>Numerowana lista:</h3>
+<ol>
+<li>Pierwszy</li>
+<li>Drugi  </li>
+<li>Trzeci</li>
+</ol>
+<h3>Link:</h3>
+<p><a href="https://github.com">GitHub</a></p>
+<h3>Kod inline:</h3>
+<p>Użyj <code>print("Hello")</code> w Pythonie.</p>
+<h3>Blok kodu:</h3>
+<pre class="codehilite"><code class="language-python">def hello():
+    print(&quot;Hello, World!&quot;)
+    return &quot;success&quot;
+</code></pre>
+
+<h3>Tabela:</h3>
+<table>
+<thead>
+<tr>
+<th>Nazwa</th>
+<th>Wiek</th>
+<th>Miasto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Anna</td>
+<td>25</td>
+<td>Warszawa</td>
+</tr>
+<tr>
+<td>Jan</td>
+<td>30</td>
+<td>Kraków</td>
+</tr>
+</tbody>
+</table>
+<h3>Cytat:</h3>
+<blockquote>
+<p>To jest cytat<br>
+wieloliniowy</p>
+</blockquote>
+<hr>
+<h3>Obraz:</h3>
+<p><img alt="Python Logo" src="https://www.python.org/static/img/python-logo.png"></p>
+    
+    <hr>
+    <p><em>Ten HTML został wygenerowany z Markdown i przeszedł sanityzację XSS.</em></p>
+</body>
+</html>
