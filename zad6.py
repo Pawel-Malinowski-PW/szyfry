@@ -1,7 +1,7 @@
-# filepath: [zad6.py](http://_vscodecontentref_/0)
 import requests
 from passlib.hash import md5_crypt, sha256_crypt, argon2
 import string
+import base64
 
 hashes = [
     "$1$k8nhEGc9$MwWuWMnHqzGdszCwI98RZ0",
@@ -30,14 +30,25 @@ def crack_sha256_crypt(hash_value, passwords):
     return None
 
 def crack_argon2id(hash_value, passwords):
-    # Passlib argon2 rozpoznaje pełny hash, więc wystarczy porównać wygenerowany hash
+    parts = hash_value.split('$')
+    params = parts[3]
+    salt_b64 = parts[4]
+
+    memory = time_cost = parallelism = None
+    for kv in params.split(','):
+        k, v = kv.split('=')
+        if k == 'm': memory = int(v)
+        elif k == 't': time_cost = int(v)
+        elif k == 'p': parallelism = int(v)
+
+    salt_bytes = base64.b64decode(salt_b64)
+    
     for pwd in passwords:
-        if argon2.hash(pwd, salt=None, params=None) == hash_value:
+        h = argon2.using(type='id', memory_cost=memory, time_cost=time_cost, 
+                        parallelism=parallelism, salt=salt_bytes).hash(pwd)
+        if h == hash_value:
             return pwd
-    # Ale passlib nie pozwala na podanie własnego salt i parametrów przez hash(), więc:
-    # Użyj verify() jeśli chcesz, ale zadanie zabrania tego.
-    # Możesz pominąć ten przypadek lub użyć zewnętrznej biblioteki do ręcznego porównania.
-    return "Nie można złamać bez verify()"
+    return None
 
 def crack_md5_crypt_pepper(hash_value, passwords):
     salt = hash_value.split('$')[2]
