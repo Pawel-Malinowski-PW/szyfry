@@ -39,20 +39,17 @@ for experiment in range(200):
     md5_table = {}
     collision_found = False
     
-    # Generuj listę haseł
     for i in range(exact):
         pwd = random_password()
         md5_hash = hashlib.md5(pwd.encode()).hexdigest()[:6]
         passwords_list.append((pwd, md5_hash))
     
-    # Sprawdź kolizje w liście
     for i, (pwd, md5_hash) in enumerate(passwords_list):
         if md5_hash in md5_table:
             collision_found = True
             break
         md5_table[md5_hash] = (pwd, i)
     
-    # Zlicz wyniki
     if collision_found:
         collisions_found += 1
     else:

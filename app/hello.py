@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, make_response
 import markdown
+<<<<<<< HEAD
 import nh3
+=======
+>>>>>>> f02d5e2c315ee9d24c3877502d2467cffb7ae6ad
 from collections import deque
 
 app = Flask(__name__)
@@ -8,6 +11,7 @@ app = Flask(__name__)
 notes = []
 recent_users = deque(maxlen=3)
 
+<<<<<<< HEAD
 
 ALLOWED_TAGS = {
     'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
@@ -20,6 +24,8 @@ ALLOWED_ATTRIBUTES = {
     'img': {'src', 'alt', 'title'},
 }
 
+=======
+>>>>>>> f02d5e2c315ee9d24c3877502d2467cffb7ae6ad
 @app.route("/")
 def username():
     return render_template("main.html")
@@ -41,7 +47,10 @@ def hello():
 def render():
     md = request.form.get("markdown","")
     rendered = markdown.markdown(md)
+<<<<<<< HEAD
     rendered = nh3.clean(rendered, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
+=======
+>>>>>>> f02d5e2c315ee9d24c3877502d2467cffb7ae6ad
     notes.append(rendered)
     return render_template("markdown.html", rendered=rendered)
 
@@ -52,3 +61,9 @@ def render_old(rendered_id):
 
     rendered = notes[int(rendered_id) - 1]
     return render_template("markdown.html", rendered=rendered)
+<<<<<<< HEAD
+=======
+
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=5000)
+>>>>>>> f02d5e2c315ee9d24c3877502d2467cffb7ae6ad
